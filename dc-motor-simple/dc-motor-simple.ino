@@ -1,49 +1,15 @@
-const int LED = 13;
+#include <DcMotor.h>
 
-class PumpMotor {
-  private:
-    int pin1;
-    int pin2;
-    bool running = false;
-    
-  public:
-    PumpMotor(int pin1, int pin2) {
-      this->pin1 = pin1;
-      this->pin2 = pin2;
-      analogWrite(pin2, 0);
-    }
-    void on() {
-      this->running = true;
-      analogWrite(pin1, 255);
-      digitalWrite(LED, HIGH);
-    }
-    void off() {
-      this->running = false;
-      analogWrite(pin1, 0);
-      digitalWrite(LED, LOW); 
-    }
-    bool isOn() {
-      Serial.print("is on: ");
-      Serial.println(this->running);
-      return this->running;
-    }
-    void toggle() {
-      if (this->isOn()) {
-        this->off();
-      } else {
-        this->on();
-      }
-    }
-};
+const int LED = 13;
 
 class PumpController {
   private:
-    PumpMotor *pump;
+    DcMotor *pump;
     int lastPass = 0;
     const int sec10 = 1000UL * 10;
 
   public: 
-    PumpController(PumpMotor *pump) {
+    PumpController(DcMotor *pump) {
       this->pump = pump;
     }
 
@@ -82,7 +48,7 @@ void setup() {
   
   pinMode(LED, OUTPUT);
 
-  PumpMotor *m = new PumpMotor(IN1, IN2);
+  DcMotor *m = new DcMotor(IN1, IN2);
   controller = new PumpController(m);
 }
 
